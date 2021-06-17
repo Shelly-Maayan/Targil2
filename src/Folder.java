@@ -31,6 +31,15 @@ public class Folder extends StorageItem {
         return this.itemsList;
     }
 
+    public void print_folder(){
+        System.out.println(this.getName() + ":");
+        for(int i=0; i<this.itemsList.size(); i++)
+        {
+            System.out.println(this.itemsList.get(i).getName());
+        }
+        System.out.println("-------");
+
+    }
     public File findFile (String path) {
         ArrayList<String> pathItems = new ArrayList<String>(Arrays.asList(path.split("/")));
         ArrayList<StorageItem> wantedItem = this.itemsList;

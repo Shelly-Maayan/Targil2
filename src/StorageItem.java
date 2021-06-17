@@ -32,7 +32,7 @@ public abstract class StorageItem {
 
     public abstract int getSize();
 
-    private void sortFolders(SortingField field, ArrayList<StorageItem> itemsList) {
+    private void sortFolder(SortingField field, ArrayList<StorageItem> itemsList) {
         Comparator<StorageItem> compareName = Comparator.comparing((StorageItem::getName));
 
         switch (field.toString()) {
@@ -55,12 +55,18 @@ public abstract class StorageItem {
     }
     public void printTree(SortingField field) {
         if (this instanceof File) {
-            return; //Print later!!!
+            return;
         }
+        sortExternalFolder((Folder) this, field);
         int indent = 0;
         StringBuilder sb = new StringBuilder();
         printDirectoryTree((Folder)this, indent, sb, field);
          System.out.println(sb);
+    }
+
+    private void sortExternalFolder(Folder folder, SortingField field)
+    {
+        sortFolder(field, folder.getItemsList());
     }
 
     private static String getIndentString(int indent) {
@@ -82,7 +88,7 @@ public abstract class StorageItem {
         sb.append("\n");
         for(int i = 0; i < folder.getItemsList().size(); i++) {
             if(folder.getItemsList().get(i) instanceof Folder) {
-                sortFolders(field, ((Folder) folder.getItemsList().get(i)).getItemsList());
+                sortFolder(field, ((Folder) folder.getItemsList().get(i)).getItemsList());
                 printDirectoryTree((Folder) folder.getItemsList().get(i), indent + 1, sb, field);
             }
             else
