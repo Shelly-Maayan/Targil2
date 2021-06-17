@@ -2,13 +2,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public enum SortingField {
-    itemName {
-        public void SortItems (ArrayList<? extends StorageItem> itemsList) {
-            Comparator<? extends StorageItem> nameComperator = Comparator.comparing();
-
-            itemsList.sort(nameComperator);
-
+    NAME {
+        @Override
+        public String toString() {
+            return "NAME";
         }
-
+    },
+    SIZE {
+        @Override
+        public String toString() {
+            return "SIZE";
+        }
+    },
+    DATE {
+        @Override
+        public String toString() {
+            return "DATE";
+        }
     }
 }

@@ -1,3 +1,4 @@
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -35,7 +36,9 @@ public class Folder extends StorageItem {
         ArrayList<StorageItem> wantedItem = this.itemsList;
         for (int i = 0; i < pathItems.size(); i++) {
             for (int j = 0; j < wantedItem.size(); j++) {
-                if (pathItems.get(i) == wantedItem.get(j).getName()) {
+                //String name = wantedItem.get(j).getName();
+                //String name2 = pathItems.get(i);
+                if (pathItems.get(i).equals(wantedItem.get(j).getName())) {
                     if (wantedItem.get(j) instanceof File) {
                         if (i == pathItems.size() - 1)
                             return (File) wantedItem.get(j);

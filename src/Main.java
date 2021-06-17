@@ -7,7 +7,7 @@ public class Main {
         rnd = new Random(42);
 
         Folder fo1 = new Folder("B");
-        File fi1 = new File("bye", "log");
+        File fi1 = new File("dye", "log");
         fo1.addItem(fi1);
         Folder fo2 = new Folder("A");
         fo2.addItem(fo1);

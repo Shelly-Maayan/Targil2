@@ -1,3 +1,4 @@
+import java.text.ParseException;
 import java.util.Date;
 
 public class File extends StorageItem {
@@ -9,7 +10,9 @@ public class File extends StorageItem {
         this.content = "";
         this.ending = ending;
     }
-
+    public void addContent(String input) {
+        this.content = input;
+    }
     @Override
     public int getSize() {
         return content.length();
