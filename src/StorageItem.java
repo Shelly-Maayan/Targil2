@@ -9,9 +9,15 @@ public abstract class StorageItem {
     private String itemName;
     private Date itemDate;
 
-    public long randomDate(String strDate) {
+    /**
+     * Converting a date to milli seconds from 01/01/1970.
+     * @param strDate a date in string form.
+     * Returns a date in a milii seconds form.
+     */
+    public long dateToMillis(String strDate) {
         long milliseconds = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         try {
             Date date = dateFormat.parse(strDate);
             milliseconds = date.getTime();
@@ -22,84 +28,144 @@ public abstract class StorageItem {
         return milliseconds;
     }
 
+    /**
+     * Constructor for storage item.
+     * Initialize items name and generate random creation date.
+     * @param itemName storage item's name (type String).
+     */
     public StorageItem(String itemName) {
         this.itemName = itemName;
-        long startDate = randomDate("01/01/2017 00:00:00");
-        long endDate = randomDate("31/12/2021 23:59:59");
-        long rndLong = (Main.rnd.nextLong() % (endDate - startDate)) + startDate;
+        long startDate = dateToMillis("01/01/2017 00:00:00");
+        long endDate = dateToMillis("31/12/2021 23:59:59");
+        long rndLong =
+                (Main.rnd.nextLong() % (endDate - startDate)) + startDate;
         this.itemDate = new Timestamp(rndLong);
     }
-
+    /**
+     * Gets size of storage item.
+     */
     public abstract int getSize();
 
-    private void sortFolder(SortingField field, ArrayList<StorageItem> itemsList) {
-        Comparator<StorageItem> compareName = Comparator.comparing((StorageItem::getName));
+    /**
+     * Sorts folder by requested method.
+     * @param field a method to sort the folders by.
+     * @param itemsList the items to sort.
+     */
+    private void sortFolder(SortingField field,
+                            ArrayList<StorageItem> itemsList) {
+        Comparator<StorageItem> compareName =
+                Comparator.comparing((StorageItem::getName));
 
         switch (field.toString()) {
             case "NAME":
                 itemsList.sort(compareName);
                 break;
             case "SIZE":
-                Comparator<StorageItem> compareSize = Comparator.comparing((StorageItem::getSize));
-                Comparator<StorageItem> fullCompareSize = compareSize.thenComparing(compareName);
+                Comparator<StorageItem> compareSize =
+                        Comparator.comparing((StorageItem::getSize));
+                Comparator<StorageItem> fullCompareSize =
+                        compareSize.thenComparing(compareName);
                 itemsList.sort(fullCompareSize);
                 break;
             case "DATE":
-                Comparator<StorageItem> compareDate = Comparator.comparing((StorageItem::getItemDate));
-                Comparator<StorageItem> fullCompareDate = compareDate.thenComparing(compareName);
+                Comparator<StorageItem> compareDate =
+                        Comparator.comparing((StorageItem::getItemDate));
+                Comparator<StorageItem> fullCompareDate =
+                        compareDate.thenComparing(compareName);
                 itemsList.sort(fullCompareDate);
                 break;
             default:
                 break;
         }
     }
+
+    /**
+     * Sorts the storage items and prints them in a tree struct.
+     * @param field a method to sort by.
+     */
     public void printTree(SortingField field) {
         if (this instanceof File) {
             return;
         }
         sortExternalFolder((Folder) this, field);
         int indent = 0;
-        StringBuilder sb = new StringBuilder();
-        printDirectoryTree((Folder)this, indent, sb, field);
-         System.out.println(sb);
+        StringBuilder printString = new StringBuilder();
+        printDirectoryTree((Folder)this, indent, printString, field);
+        System.out.println(printString);
     }
 
+    /**
+     * Sorts the first folder
+     * @param folder the folder to sort.
+     * @param field a method to sort by.
+     */
     private void sortExternalFolder(Folder folder, SortingField field)
     {
         sortFolder(field, folder.getItemsList());
     }
 
+    /**
+     * Gets a string with indents and symbols that matches the printing format.
+     * @param indent amount of indents and symbols to print.
+     * Returns the string to print.
+     */
     private static String getIndentString(int indent) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder printString = new StringBuilder();
         for (int i = 0; i < indent; i++) {
-            sb.append("|  ");
+            printString.append("|  ");
         }
-        return sb.toString();
+        return printString.toString();
     }
-    private static void printFile(File file, int indent, StringBuilder sb) {
-        sb.append(getIndentString(indent));
-        sb.append(file.getName());
-        sb.append("\n");
+
+    /**
+     * Prints indents and file's name.
+     * @param file the wanted file to print.
+     * @param indent amount of indents and symbols to print.
+     * @param printString the string to print by printing format.
+     */
+    private static void printFile(File file, int indent,
+                                  StringBuilder printString) {
+        printString.append(getIndentString(indent));
+        printString.append(file.getName());
+        printString.append("\n");
     }
-    public void printDirectoryTree(Folder folder, int indent, StringBuilder sb,
+
+    /**
+     * Prints all storage items in order.
+     * @param folder the folder to print
+     * @param indent amount of indents and symbols to print.
+     * @param printString the string to print by printing format.
+     * @param field a method to sort by.
+     */
+    public void printDirectoryTree(Folder folder, int indent,
+                                   StringBuilder printString,
                                    SortingField field) {
-        sb.append(getIndentString(indent));
-        sb.append(folder.getName());
-        sb.append("\n");
+        printString.append(getIndentString(indent));
+        printString.append(folder.getName());
+        printString.append("\n");
         for(int i = 0; i < folder.getItemsList().size(); i++) {
             if(folder.getItemsList().get(i) instanceof Folder) {
-                sortFolder(field, ((Folder) folder.getItemsList().get(i)).getItemsList());
-                printDirectoryTree((Folder) folder.getItemsList().get(i), indent + 1, sb, field);
+                sortFolder(field,
+                        ((Folder) folder.getItemsList().get(i)).getItemsList());
+                printDirectoryTree((Folder) folder.getItemsList().get(i),
+                        indent + 1, printString, field);
             }
             else
-                printFile((File)folder.getItemsList().get(i), indent + 1, sb);
+                printFile((File)folder.getItemsList().get(i),
+                        indent + 1, printString);
         }
     }
 
+    /**
+     * Gets storage item's name.
+     */
     public String getName () {
         return this.itemName;
     }
 
+    /**
+     * Gets storage item's creation date.
+     */
     public Date getItemDate () {
         return this.itemDate;
     }

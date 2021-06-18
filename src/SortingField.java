@@ -1,7 +1,7 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-
 public enum SortingField {
+    /**
+     * Matches each sorting type to its string
+     */
     NAME {
         @Override
         public String toString() {

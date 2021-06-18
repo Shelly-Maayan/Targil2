@@ -19,7 +19,8 @@ public class Main {
         fo2.addItem(fi3);
         Folder fo3 = new Folder("C");
         File fi4 = new File("code", "java");
-        fi4.addContent("class A {\n    public A() {\n        System.out.println(\"Hey there\");\n    }\n}");
+        fi4.addContent("class A {\n    public A() " +
+                "{\n        System.out.println(\"Hey there\");\n    }\n}");
         fo3.addItem(fi4);
         fo1.addItem(fo3);
 
