@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.util.Date;
 
 public class File extends StorageItem {
@@ -21,8 +20,8 @@ public class File extends StorageItem {
      * Sets file's content.
      * @param input the content to add to file.
      */
-    public void addContent(String input) {
-        this.content = input;
+    public void addContent(String contentToAdd) {
+        this.content += contentToAdd;
     }
 
     /**
@@ -56,7 +55,7 @@ public class File extends StorageItem {
      */
     public void printContent() {
         System.out.println(this.getName() + " Size: " + this.getSize() +
-                "Mb Created: " +
+                "MB Created: " +
                 this.getItemDate());
         System.out.println(this.content);
     }

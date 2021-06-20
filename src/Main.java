@@ -26,15 +26,15 @@ public class Main {
 
         System.out.println("Sorting by size:");
         fo2.printTree(SortingField.SIZE);
-        System.out.println("\n");
+        System.out.println();
 
         System.out.println("Sorting by name:");
         fo2.printTree(SortingField.NAME);
-        System.out.println("\n");
+        System.out.println();
 
         System.out.println("Sorting by date:");
         fo2.printTree(SortingField.DATE);
-        System.out.println("\n");
+        System.out.println();
 
         String[] paths = {"aa.py", "B/code.java", "B/C/code.java", "AA.txt"};
 

@@ -8,6 +8,7 @@ import java.util.Date;
 public abstract class StorageItem {
     private String itemName;
     private Date itemDate;
+    private static int count_files = 0;
 
     /**
      * Converting a date to milli seconds from 01/01/1970.
@@ -29,16 +30,26 @@ public abstract class StorageItem {
     }
 
     /**
+     * Returns absolute value of a given number
+     * @param number a long type number
+     */
+    private long abs(long number) {
+        if(number < 0)
+            return -number;
+        return number;
+    }
+
+    /**
      * Constructor for storage item.
      * Initialize items name and generate random creation date.
      * @param itemName storage item's name (type String).
      */
     public StorageItem(String itemName) {
         this.itemName = itemName;
-        long startDate = dateToMillis("01/01/2017 00:00:00");
-        long endDate = dateToMillis("31/12/2021 23:59:59");
+        long startDate = dateToMillis("2017/01/01 00:00:00");
+        long endDate = dateToMillis("2021/12/31 23:59:59");
         long rndLong =
-                (Main.rnd.nextLong() % (endDate - startDate)) + startDate;
+                (abs(Main.rnd.nextLong() % (endDate - startDate)) + startDate);
         this.itemDate = new Timestamp(rndLong);
     }
     /**
@@ -140,6 +151,7 @@ public abstract class StorageItem {
     public void printDirectoryTree(Folder folder, int indent,
                                    StringBuilder printString,
                                    SortingField field) {
+
         printString.append(getIndentString(indent));
         printString.append(folder.getName());
         printString.append("\n");
@@ -150,9 +162,11 @@ public abstract class StorageItem {
                 printDirectoryTree((Folder) folder.getItemsList().get(i),
                         indent + 1, printString, field);
             }
-            else
-                printFile((File)folder.getItemsList().get(i),
+            else {
+                printFile((File) folder.getItemsList().get(i),
                         indent + 1, printString);
+            }
+
         }
     }
 
