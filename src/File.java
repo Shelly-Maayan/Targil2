@@ -18,7 +18,7 @@ public class File extends StorageItem {
 
     /**
      * Sets file's content.
-     * @param input the content to add to file.
+     * @param contentToAdd the content to add to file.
      */
     public void addContent(String contentToAdd) {
         this.content += contentToAdd;

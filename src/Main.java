@@ -19,22 +19,21 @@ public class Main {
         fo2.addItem(fi3);
         Folder fo3 = new Folder("C");
         File fi4 = new File("code", "java");
-        fi4.addContent("class A {\n    public A() " +
-                "{\n        System.out.println(\"Hey there\");\n    }\n}");
+        fi4.addContent("class A {\n    public A() {\n        System.out.println(\"Hey there\");\n    }\n}");
         fo3.addItem(fi4);
         fo1.addItem(fo3);
 
         System.out.println("Sorting by size:");
         fo2.printTree(SortingField.SIZE);
-        System.out.println();
+        System.out.println("\n");
 
         System.out.println("Sorting by name:");
         fo2.printTree(SortingField.NAME);
-        System.out.println();
+        System.out.println("\n");
 
         System.out.println("Sorting by date:");
         fo2.printTree(SortingField.DATE);
-        System.out.println();
+        System.out.println("\n");
 
         String[] paths = {"aa.py", "B/code.java", "B/C/code.java", "AA.txt"};
 

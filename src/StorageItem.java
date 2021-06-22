@@ -13,7 +13,7 @@ public abstract class StorageItem {
     /**
      * Converting a date to milli seconds from 01/01/1970.
      * @param strDate a date in string form.
-     * Returns a date in a milii seconds form.
+     * Returns a date in a milli seconds form.
      */
     public long dateToMillis(String strDate) {
         long milliseconds = 0;
@@ -49,7 +49,8 @@ public abstract class StorageItem {
         long startDate = dateToMillis("2017/01/01 00:00:00");
         long endDate = dateToMillis("2021/12/31 23:59:59");
         long rndLong =
-                (abs(Main.rnd.nextLong() % (endDate - startDate)) + startDate);
+                (abs(Main.rnd.nextLong() % (endDate - startDate))
+                        + startDate);
         this.itemDate = new Timestamp(rndLong);
     }
     /**
@@ -96,12 +97,15 @@ public abstract class StorageItem {
      */
     public void printTree(SortingField field) {
         if (this instanceof File) {
-            return;
+            System.out.println(this.getName());
         }
         sortExternalFolder((Folder) this, field);
         int indent = 0;
+        count_files = 0;
+        int totalFiles = this.countTotalFiles((Folder)this);
         StringBuilder printString = new StringBuilder();
-        printDirectoryTree((Folder)this, indent, printString, field);
+        printDirectoryTree((Folder)this, indent, printString, field,
+                            totalFiles);
         System.out.println(printString);
     }
 
@@ -116,6 +120,21 @@ public abstract class StorageItem {
     }
 
     /**
+     * Counts total files in directory
+     * @param folder the folder to start counting files from.
+     */
+    private int countTotalFiles(Folder folder) {
+        int count = 0;
+        for(StorageItem item :folder.getItemsList()) {
+            if(item instanceof File)
+                count++;
+            else
+                count += countTotalFiles((Folder) item);
+        }
+        return count;
+    }
+
+    /**
      * Gets a string with indents and symbols that matches the printing format.
      * @param indent amount of indents and symbols to print.
      * Returns the string to print.
@@ -123,7 +142,7 @@ public abstract class StorageItem {
     private static String getIndentString(int indent) {
         StringBuilder printString = new StringBuilder();
         for (int i = 0; i < indent; i++) {
-            printString.append("|  ");
+            printString.append("|    ");
         }
         return printString.toString();
     }
@@ -138,7 +157,6 @@ public abstract class StorageItem {
                                   StringBuilder printString) {
         printString.append(getIndentString(indent));
         printString.append(file.getName());
-        printString.append("\n");
     }
 
     /**
@@ -150,7 +168,7 @@ public abstract class StorageItem {
      */
     public void printDirectoryTree(Folder folder, int indent,
                                    StringBuilder printString,
-                                   SortingField field) {
+                                   SortingField field, int totalFiles) {
 
         printString.append(getIndentString(indent));
         printString.append(folder.getName());
@@ -160,13 +178,15 @@ public abstract class StorageItem {
                 sortFolder(field,
                         ((Folder) folder.getItemsList().get(i)).getItemsList());
                 printDirectoryTree((Folder) folder.getItemsList().get(i),
-                        indent + 1, printString, field);
+                        indent + 1, printString, field, totalFiles);
             }
             else {
                 printFile((File) folder.getItemsList().get(i),
                         indent + 1, printString);
+                count_files++;
+                if(count_files < totalFiles)
+                    printString.append("\n");
             }
-
         }
     }
 
